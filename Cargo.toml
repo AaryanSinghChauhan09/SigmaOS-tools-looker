@@ -1,0 +1,8 @@
+[package]
+name = "SigmaOS-tools-looker"
+version = "0.1.0"
+edition = "2021"
+description = "Looker LookML dimension and measure resolver"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
