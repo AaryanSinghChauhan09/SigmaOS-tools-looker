@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 //! Looker LookML Dimension & Measure Resolver for SigmaOS
 
 #[derive(Debug, Clone, PartialEq)]
