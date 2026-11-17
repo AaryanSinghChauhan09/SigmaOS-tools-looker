@@ -3,7 +3,7 @@ name = "SigmaOS-tools-looker"
 tier = 2
 stability = "scaffold"
 language = "rust"
-description = "tools-looker component"
+description = "tools looker component"
 upstream = []
 
 [contract]
