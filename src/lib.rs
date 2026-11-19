@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 #![allow(non_snake_case)]
 //! Looker LookML Dimension & Measure Resolver for SigmaOS
 
@@ -113,5 +114,61 @@ mod tests {
 
         // Assert
         assert_eq!(sql, "SELECT order_status AS status, SUM(amount) AS total_revenue FROM warehouse.orders GROUP BY 1");
+    }
+}
+
+
+#[cfg(test)]
+mod looker_extra_tests {
+    use super::*;
+
+    #[test]
+    fn test_lookml_empty_fields_error_aaa() {
+        // Arrange
+        let view = LookMlView::new("users", "analytics.users", Vec::new());
+        // Act
+        let res = view.generate_sql(&["non_existent"]);
+        // Assert
+        assert!(res.is_err());
+    }
+
+    #[test]
+    fn test_lookml_measure_average_sql_aaa() {
+        // Arrange
+        let view = LookMlView::new(
+            "metrics",
+            "db.metrics",
+            vec![
+                LookMlField::Measure {
+                    name: "avg_latency".into(),
+                    agg: AggregationType::Average,
+                    column: "latency_ms".into(),
+                },
+            ],
+        );
+        // Act
+        let sql = view.generate_sql(&["avg_latency"]).unwrap();
+        // Assert
+        assert!(sql.contains("AVG(latency_ms) AS avg_latency"));
+    }
+
+    #[test]
+    fn test_lookml_measure_count_sql_aaa() {
+        // Arrange
+        let view = LookMlView::new(
+            "events",
+            "db.events",
+            vec![
+                LookMlField::Measure {
+                    name: "total_events".into(),
+                    agg: AggregationType::Count,
+                    column: "id".into(),
+                },
+            ],
+        );
+        // Act
+        let sql = view.generate_sql(&["total_events"]).unwrap();
+        // Assert
+        assert!(sql.contains("COUNT(id) AS total_events"));
     }
 }
